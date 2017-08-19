@@ -5,7 +5,10 @@ sess = tf.InteractiveSession()# 创建session
 
 	def weight_variable(shape):
 		# 正态分布，标准差为0.1，默认最大为1，最小为-1，均值为0
+		# ==================
+		#这个和下面的一般用哪个 这个需要了解原理吗
         #tf.random_normal([3, 3, 1, 10]))
+        # ==================
     		initial = tf.truncated_normal(shape, stddev=0.1)
     		return tf.Variable(initial)
 	def bias_variable(shape):
@@ -13,18 +16,14 @@ sess = tf.InteractiveSession()# 创建session
     		initial = tf.constant(0.1, shape=shape)
     		return tf.Variable(initial)
 	def conv2d(x, W):
-        #==================
         #tf.nn.conv2d(input, filter, strides, padding, use_cudnn_on_gpu=None, data_format=None, name=None)
-        # ==================
         #x表示输入的数据 图片的数量 高度 宽度 通道数
         #y表示卷积核大小
         #各个方向遍历补偿为1
         #padding越界填充方式
   		return tf.nn.conv2d(x, W, strides=[1, 1, 1, 1], padding='SAME')
 	def max_pool_2x2(x):
-        # ==================
         # tf.nn.max_pool( value, ksize,strides,padding,data_format=’NHWC’,name=None)
-        # ==================
         # x输入的数据 图片的数量 高度 宽度 通道数
 		# 池化的时候核心（面板）大小为2*2
         # 步数遍历的时候步数2，防止重叠
@@ -37,7 +36,8 @@ sess = tf.InteractiveSession()# 创建session
 	xs = tf.placeholder(tf.float32, [None, 28*28])
 	# 类别是0-9总共10个类别，对应输出分类结果
 	ys = tf.placeholder(tf.float32, [None, 10])
-
+    # x_image又把xs reshape成了28*28*1的形状，因为是灰色图片，所以通道是1.作为训练时的input，-1代表图片数量不定
+    x_image = tf.reshape(xs, [-1, 28, 28, 1])
 
 # 三，搭建网络
 
